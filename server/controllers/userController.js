@@ -66,6 +66,52 @@ module.exports = {
     }
   },
 
+  refreshUser: async (req, res) => {
+    try {
+      passport.authenticate('refresh', (error, user, info) => {
+        if (error) {
+          return res.status(500).json(error);
+        }
+
+        if (!user) {
+          return res.status(401).json(info.message);
+        }
+
+        req.login(user, { session: false }, (err) => {
+          if (err) {
+            return res.send(err);
+          }
+
+          const accessToken = jwt.sign(
+            { id: user.email },
+            process.env.JWT_SECRET_KEY,
+            { expiresIn: '1h' }
+          );
+          const refreshToken = jwt.sign(
+            { id: user.email },
+            process.env.JWT_REFRESH_KEY,
+            { expiresIn: '12h' }
+          );
+
+          res.cookie('user', user._id, { maxAge: 1000 * 60 * 60 });
+          res.cookie('auth', refreshToken, {
+            maxAge: 1000 * 60 * 60 * 24,
+            httpOnly: true,
+          });
+
+          res.status(200).json({
+            accessToken,
+            email: user.email,
+            nickname: user.nickname,
+            authId: user.authId,
+          });
+        });
+      })(req, res);
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  },
+
   getUser: async (req, res) => {
     try {
       const user = await userService.getUser(req.cookies.user);

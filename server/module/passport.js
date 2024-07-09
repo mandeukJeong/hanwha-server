@@ -7,6 +7,16 @@ const {
 } = require('passport-jwt');
 const LocalStrategy = require('passport-local').Strategy;
 
+const cookieExtractor = (req) => {
+  const { auth } = req.cookies;
+  return auth;
+};
+
+const opts = {
+  jwtFromRequest: cookieExtractor,
+  secretOrKey: process.env.JWT_REFRESH_KEY,
+};
+
 let db = connectDB
   .then((client) => {
     console.log('MONGODB 연결 성공');
@@ -63,5 +73,20 @@ module.exports = () => {
         }
       }
     )
+  );
+
+  passport.use(
+    'refresh',
+    new JWTStrategy(opts, async (jwtPayload, done) => {
+      const user = await db
+        .collection('user')
+        .findOne({ email: jwtPayload.id });
+
+      if (user) {
+        return done(null, user);
+      } else {
+        return done(null, false, { message: '올바르지 않은 인증 정보입니다.' });
+      }
+    })
   );
 };
