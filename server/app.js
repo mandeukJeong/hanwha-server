@@ -6,10 +6,10 @@ const cors = require('cors');
 const passport = require('passport');
 const passportConfig = require('./module/passport');
 
-dotenv.config();
 const userRouter = require('./routes/user');
 
 const app = express();
+dotenv.config();
 app.set('port', process.env.PORT);
 
 app.use(cookieParser());

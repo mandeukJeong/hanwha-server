@@ -12,5 +12,6 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   userController.getUser
 );
+router.post('/logout', userController.logout);
 
 module.exports = router;
