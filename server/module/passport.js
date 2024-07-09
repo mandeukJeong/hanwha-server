@@ -41,4 +41,27 @@ module.exports = () => {
       }
     )
   );
+
+  passport.use(
+    'jwt',
+    new JWTStrategy(
+      {
+        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+        secretOrKey: process.env.JWT_SECRET_KEY,
+      },
+      async (jwtPayload, done) => {
+        const user = await db
+          .collection('user')
+          .findOne({ email: jwtPayload.id });
+
+        if (user) {
+          return done(null, user);
+        } else {
+          return done(null, false, {
+            message: '올바르지 않은 인증 정보입니다.',
+          });
+        }
+      }
+    )
+  );
 };

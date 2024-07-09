@@ -65,4 +65,17 @@ module.exports = {
       res.status(500).json({ error: e.message });
     }
   },
+
+  getUser: async (req, res) => {
+    try {
+      const user = await userService.getUser(req.cookies.user);
+      return res.status(200).json({
+        email: user.email,
+        nickname: user.nickname,
+        authId: user.authId,
+      });
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  },
 };

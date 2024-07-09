@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const connectDB = require('../database/database');
 const bcrypt = require('bcrypt');
 
@@ -30,6 +31,14 @@ module.exports = {
           authId: 1,
         });
       }
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  getUser: async (id) => {
+    try {
+      return await db.collection('user').findOne({ _id: new ObjectId(id) });
     } catch (e) {
       throw e;
     }
