@@ -134,4 +134,35 @@ module.exports = {
       return res.status(500).json({ error: e.message });
     }
   },
+
+  sendEmail: async (req, res) => {
+    try {
+      const { email } = req.body;
+      const verifyNumber = Math.random().toString().substring(2, 6);
+      const emailInfo = {
+        toEmail: email,
+        subject: '한화 팬페이지 인증번호 발송 메일입니다.',
+        text: `${email}님 안녕하세요!\n\n 인증번호: ${verifyNumber}\n\n 인증번호를 화면에 입력해주세요.`,
+      };
+
+      res.cookie('verify', verifyNumber, {
+        maxAge: 1000 * 60 * 10,
+        httpOnly: true,
+      });
+
+      res.cookie('email', email, {
+        maxAge: 1000 * 60 * 10,
+        httpOnly: true,
+      });
+
+      await userService.sendEmail(emailInfo);
+      res.status(200).send('이메일 전송 성공');
+    } catch (e) {
+      if (e.code === 404) {
+        return res.status(e.code).json({ error: e.message });
+      } else {
+        return res.status(500).json({ error: e.message });
+      }
+    }
+  },
 };

@@ -13,5 +13,6 @@ router.get(
   userController.getUser
 );
 router.post('/logout', userController.logout);
+router.post('/email', userController.sendEmail);
 
 module.exports = router;
