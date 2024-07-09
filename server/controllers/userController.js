@@ -1,14 +1,12 @@
+const dotenv = require('dotenv');
 const userService = require('../services/userService');
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
+
+dotenv.config();
 
 module.exports = {
   registerUser: async (req, res) => {
-    // email, nickname, password 미입력
-    if (!req.body.email || !req.body.nickname || !req.body.password) {
-      return res.status(400).json({
-        message:
-          'Invalid request body. Must include email, nickname and password',
-      });
-    }
     try {
       await userService.registerUser(req.body);
       return res.status(201).json({ message: '회원가입에 성공하였습니다.' });
@@ -19,6 +17,52 @@ module.exports = {
       } else {
         return res.status(500).json({ error: e.message });
       }
+    }
+  },
+
+  loginUser: async (req, res, next) => {
+    try {
+      passport.authenticate('local', (error, user, info) => {
+        if (error) {
+          return res.status(500).json(error);
+        }
+
+        if (!user) {
+          return res.status(401).json(info.message);
+        }
+
+        req.login(user, { session: false }, (err) => {
+          if (err) {
+            return res.send(err);
+          }
+
+          const accessToken = jwt.sign(
+            { id: user.email },
+            process.env.JWT_SECRET_KEY,
+            { expiresIn: '1h' }
+          );
+          const refreshToken = jwt.sign(
+            { id: user.email },
+            process.env.JWT_REFRESH_KEY,
+            { expiresIn: '12h' }
+          );
+
+          res.cookie('user', user._id, { maxAge: 1000 * 60 * 60 });
+          res.cookie('auth', refreshToken, {
+            maxAge: 1000 * 60 * 60 * 24,
+            httpOnly: true,
+          });
+
+          res.status(200).json({
+            accessToken,
+            email: user.email,
+            nickname: user.nickname,
+            authId: user.authId,
+          });
+        });
+      })(req, res, next);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
     }
   },
 };
