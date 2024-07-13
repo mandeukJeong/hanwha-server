@@ -59,9 +59,35 @@ module.exports = {
         await db.collection('auth').insertOne({
           email: emailInfo.toEmail,
           verifyNumber,
+          isCheck: 0,
         });
 
         return mailer.sendMail(emailInfo);
+      }
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  checkAuth: async (authInfo) => {
+    try {
+      const isAuth = await db.collection('auth').findOne({
+        email: authInfo.email,
+        verifyNumber: authInfo.verifyNumber,
+      });
+
+      if (!isAuth) {
+        const error = new Error('인증에 실패하였습니다.');
+        error.code = 404;
+        throw error;
+      } else {
+        return await db.collection('auth').updateOne(
+          {
+            email: authInfo.email,
+            verifyNumber: authInfo.verifyNumber,
+          },
+          { $set: { isCheck: 1 } }
+        );
       }
     } catch (e) {
       throw e;

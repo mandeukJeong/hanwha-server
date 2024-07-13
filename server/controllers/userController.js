@@ -156,4 +156,17 @@ module.exports = {
       }
     }
   },
+
+  checkAuth: async (req, res) => {
+    try {
+      await userService.checkAuth(req.body);
+      return res.status(200).json({ message: '인증번호가 일치합니다' });
+    } catch (e) {
+      if (e.code === 404) {
+        return res.status(e.code).json({ error: e.message });
+      } else {
+        return res.status(500).json({ error: e.message });
+      }
+    }
+  },
 };
