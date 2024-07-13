@@ -45,7 +45,7 @@ module.exports = {
     }
   },
 
-  sendEmail: async (emailInfo) => {
+  sendEmail: async (emailInfo, verifyNumber) => {
     try {
       const isUser = await db
         .collection('user')
@@ -56,6 +56,11 @@ module.exports = {
         error.code = 404;
         throw error;
       } else {
+        await db.collection('auth').insertOne({
+          email: emailInfo.toEmail,
+          verifyNumber,
+        });
+
         return mailer.sendMail(emailInfo);
       }
     } catch (e) {

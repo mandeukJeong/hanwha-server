@@ -145,16 +145,7 @@ module.exports = {
         text: `${email}님 안녕하세요!\n\n 인증번호: ${verifyNumber}\n\n 인증번호를 화면에 입력해주세요.`,
       };
 
-      await userService.sendEmail(emailInfo);
-      res.cookie('verify', verifyNumber, {
-        maxAge: 1000 * 60 * 10,
-        httpOnly: true,
-      });
-
-      res.cookie('email', email, {
-        maxAge: 1000 * 60 * 10,
-        httpOnly: true,
-      });
+      await userService.sendEmail(emailInfo, verifyNumber);
 
       res.status(200).send('이메일 전송 성공');
     } catch (e) {
