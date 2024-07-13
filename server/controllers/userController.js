@@ -169,4 +169,29 @@ module.exports = {
       }
     }
   },
+
+  changePassword: async (req, res) => {
+    try {
+      if (!req.body.password) {
+        return res
+          .status(400)
+          .json({ message: '비밀번호가 입력되지 않았습니다.' });
+      } else if (!req.body.verifyNumber) {
+        return res
+          .status(400)
+          .json({ message: '인증번호가 입력되지 않았습니다.' });
+      } else {
+        await userService.changePassword(req.body);
+        return res
+          .status(200)
+          .json({ message: '비밀번호 변경에 성공하였습니다.' });
+      }
+    } catch (e) {
+      if (e.code === 404) {
+        return res.status(e.code).json({ error: e.message });
+      } else {
+        return res.status(500).json({ error: e.message });
+      }
+    }
+  },
 };

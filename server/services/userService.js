@@ -93,4 +93,39 @@ module.exports = {
       throw e;
     }
   },
+
+  changePassword: async (userInfo) => {
+    try {
+      const isVerify = await db.collection('auth').findOne({
+        email: userInfo.email,
+        verifyNumber: userInfo.verifyNumber,
+        isCheck: 1,
+      });
+
+      if (!isVerify) {
+        const error = new Error('이메일 인증이 완료되지 않았습니다.');
+        error.code = 404;
+        throw error;
+      } else {
+        const hashPassword = await bcrypt.hash(userInfo.password, 10);
+
+        // db에 남아있는 인증 정보 삭제
+        await db.collection('auth').deleteOne({
+          email: userInfo.email,
+          verifyNumber: userInfo.verifyNumber,
+          isCheck: 1,
+        });
+
+        // 비밀번호 변경
+        return await db.collection('user').updateOne(
+          { email: userInfo.email },
+          {
+            $set: { password: hashPassword },
+          }
+        );
+      }
+    } catch (e) {
+      throw e;
+    }
+  },
 };
