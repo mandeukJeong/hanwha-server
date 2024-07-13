@@ -47,9 +47,17 @@ module.exports = {
 
   sendEmail: async (emailInfo, verifyNumber) => {
     try {
+      const isExist = await db
+        .collection('auth')
+        .findOne({ email: emailInfo.toEmail });
       const isUser = await db
         .collection('user')
         .findOne({ email: emailInfo.toEmail });
+
+      // 기존 인증 정보 삭제
+      if (isExist) {
+        await db.collection('auth').deleteOne({ email: emailInfo.toEmail });
+      }
 
       if (!isUser) {
         const error = new Error('존재하지 않는 계정입니다.');
