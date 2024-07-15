@@ -7,6 +7,7 @@ const passport = require('passport');
 const passportConfig = require('./module/passport');
 
 const userRouter = require('./routes/user');
+const playerRouter = require('./routes/players');
 
 const app = express();
 dotenv.config();
@@ -21,6 +22,11 @@ app.use(passport.initialize());
 passportConfig();
 
 app.use('/user', userRouter);
+app.use(
+  '/players',
+  passport.authenticate('jwt', { session: false }),
+  playerRouter
+);
 
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기 중');

@@ -180,6 +180,10 @@ module.exports = {
         return res
           .status(400)
           .json({ message: '인증번호가 입력되지 않았습니다.' });
+      } else if (!req.body.email) {
+        return res
+          .status(400)
+          .json({ message: '이메일이 입력되지 않았습니다.' });
       } else {
         await userService.changePassword(req.body);
         return res
