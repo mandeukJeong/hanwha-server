@@ -11,10 +11,15 @@ connectDB
   });
 
 module.exports = {
-  getPlayerProfile: async (posCd) => {
+  getPlayerList: async (posCd) => {
     try {
+      const projection = { pCd: 1, pNm: 1, pEn: 1, img: 1, backNo: 1 };
       // 1: 투수, 2: 포수, 3: 내야수, 4: 외야수
-      return await db.collection('players').find({ posCd: posCd }).toArray();
+      return await db
+        .collection('players')
+        .find({ posCd }, { projection })
+        .sort({ backNo: 1 })
+        .toArray();
     } catch (e) {
       throw e;
     }
