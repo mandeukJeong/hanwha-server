@@ -24,4 +24,12 @@ module.exports = {
       throw e;
     }
   },
+
+  getPlayerProfile: async (pCd) => {
+    try {
+      return await db.collection('players').findOne({ pCd });
+    } catch (e) {
+      throw e;
+    }
+  },
 };
