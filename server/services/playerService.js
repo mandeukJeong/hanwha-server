@@ -27,7 +27,17 @@ module.exports = {
 
   getPlayerProfile: async (pCd) => {
     try {
-      return await db.collection('players').findOne({ pCd });
+      const playerProfile = await db.collection('players').findOne({ pCd });
+
+      if (!playerProfile) {
+        const error = new Error(
+          '해당 선수 코드에 대한 데이터가 존재하지 않습니다.'
+        );
+        error.code = 404;
+        throw error;
+      } else {
+        return playerProfile;
+      }
     } catch (e) {
       throw e;
     }
