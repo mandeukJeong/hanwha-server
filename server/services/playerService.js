@@ -42,4 +42,30 @@ module.exports = {
       throw e;
     }
   },
+
+  getPlayerScore: async (pCd, posCd) => {
+    try {
+      let projection = null;
+
+      if (posCd === 1) {
+        projection = { era: 1, win: 1, lose: 1, sv: 1, so: 1, ip: 1 };
+      }
+
+      const playerScore = await db
+        .collection('score')
+        .findOne({ pCd, posCd }, { projection });
+
+      if (!playerScore) {
+        const error = new Error(
+          '해당 선수 코드에 대한 데이터가 존재하지 않습니다.'
+        );
+        error.code = 404;
+        throw error;
+      } else {
+        return playerScore;
+      }
+    } catch (e) {
+      throw e;
+    }
+  },
 };
