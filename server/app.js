@@ -8,6 +8,7 @@ const passportConfig = require('./module/passport');
 
 const userRouter = require('./routes/user');
 const playerRouter = require('./routes/players');
+const galleryRouter = require('./routes/gallery');
 
 const app = express();
 dotenv.config();
@@ -26,6 +27,11 @@ app.use(
   '/players',
   passport.authenticate('jwt', { session: false }),
   playerRouter
+);
+app.use(
+  '/gallery',
+  passport.authenticate('jwt', { session: false }),
+  galleryRouter
 );
 
 app.listen(app.get('port'), () => {

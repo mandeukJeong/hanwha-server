@@ -49,6 +49,8 @@ module.exports = {
 
       if (posCd === 1) {
         projection = { era: 1, win: 1, lose: 1, sv: 1, so: 1, ip: 1 };
+      } else {
+        projection = { avg: 1, rbi: 1, h: 1, hr: 1, sb: 1, ops: 1 };
       }
 
       const playerScore = await db
