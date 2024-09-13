@@ -48,6 +48,7 @@ module.exports = {
           );
 
           res.cookie('user', user._id, { maxAge: 1000 * 60 * 60 });
+          res.cookie('nickname', user.nickname, { maxAge: 1000 * 60 * 60 });
           res.cookie('auth', refreshToken, {
             maxAge: 1000 * 60 * 60 * 24,
             httpOnly: true,
@@ -94,6 +95,7 @@ module.exports = {
           );
 
           res.cookie('user', user._id, { maxAge: 1000 * 60 * 60 });
+          res.cookie('nickname', user.nickname, { maxAge: 1000 * 60 * 60 });
           res.cookie('auth', refreshToken, {
             maxAge: 1000 * 60 * 60 * 24,
             httpOnly: true,
@@ -128,6 +130,7 @@ module.exports = {
   logout: async (req, res) => {
     try {
       res.clearCookie('user');
+      res.clearCookie('nickname');
       res.clearCookie('auth');
       res.status(200).json({ message: '로그아웃 성공' });
     } catch (e) {

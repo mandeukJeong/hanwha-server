@@ -8,5 +8,6 @@ router.post(
   upload.array('files'),
   galleryController.postGalleryImages
 );
+router.get('/lists', galleryController.getGalleryImages);
 
 module.exports = router;
