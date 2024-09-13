@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const connectDB = require('../database/database');
 
 let db;
@@ -55,6 +56,24 @@ module.exports = {
         totalPages: Math.ceil(totalItems / renderNum),
         imageLists,
       };
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  getPostDetail: async (id) => {
+    try {
+      const postContent = await db
+        .collection('gallery')
+        .findOne({ _id: new ObjectId(id) });
+
+      if (!postContent) {
+        const error = new Error('해당 데이터가 존재하지 않습니다.');
+        error.code = 404;
+        throw error;
+      } else {
+        return postContent;
+      }
     } catch (e) {
       throw e;
     }

@@ -9,5 +9,6 @@ router.post(
   galleryController.postGalleryImages
 );
 router.get('/lists', galleryController.getGalleryImages);
+router.get('/detail', galleryController.getPostDetail);
 
 module.exports = router;

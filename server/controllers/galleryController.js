@@ -63,4 +63,20 @@ module.exports = {
       return res.status(500).json({ error: e.message });
     }
   },
+
+  getPostDetail: async (req, res) => {
+    try {
+      if (!req.query.id) {
+        return res
+          .status(400)
+          .json({ message: '글 id가 전송되지 않았습니다.' });
+      }
+
+      const postContent = await galleryService.getPostDetail(req.query.id);
+
+      return res.status(200).send(postContent);
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  },
 };
