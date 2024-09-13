@@ -32,7 +32,7 @@ module.exports = {
     }
   },
 
-  getGalleryImages: async (pageNum, order) => {
+  getGalleryImages: async (pageNum, order, renderNum) => {
     try {
       const sortCondition =
         order === 'latest'
@@ -41,13 +41,20 @@ module.exports = {
           ? { date: 1 }
           : { heart: -1, date: -1 };
 
-      return await db
+      const totalItems = await db.collection('gallery').countDocuments();
+
+      const imageLists = await db
         .collection('gallery')
         .find()
         .sort(sortCondition)
-        .skip((pageNum - 1) * 9)
-        .limit(9)
+        .skip((pageNum - 1) * renderNum)
+        .limit(renderNum)
         .toArray();
+
+      return {
+        totalPages: Math.ceil(totalItems / renderNum),
+        imageLists,
+      };
     } catch (e) {
       throw e;
     }

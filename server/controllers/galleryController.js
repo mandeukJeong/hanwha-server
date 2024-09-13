@@ -40,6 +40,12 @@ module.exports = {
           .json({ message: '정렬 기준이 전송되지 않았습니다.' });
       }
 
+      if (!req.body.renderNum) {
+        return res.status(400).json({
+          message: '한 번에 렌더링 할 게시물 숫자가 전송되지 않았습니다.',
+        });
+      }
+
       if (!['latest', 'oldest', 'heart'].includes(req.body.order)) {
         return res
           .status(400)
@@ -47,8 +53,9 @@ module.exports = {
       }
 
       const imageList = await galleryService.getGalleryImages(
-        req.body.pageNum,
-        req.body.order
+        Number(req.body.pageNum),
+        req.body.order,
+        Number(req.body.renderNum)
       );
 
       return res.status(200).send(imageList);
