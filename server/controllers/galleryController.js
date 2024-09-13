@@ -28,34 +28,34 @@ module.exports = {
 
   getGalleryImages: async (req, res) => {
     try {
-      if (!req.body.pageNum) {
+      if (!req.query.pageNum) {
         return res
           .status(400)
           .json({ message: '페이지 번호가 전송되지 않았습니다.' });
       }
 
-      if (!req.body.order) {
+      if (!req.query.order) {
         return res
           .status(400)
           .json({ message: '정렬 기준이 전송되지 않았습니다.' });
       }
 
-      if (!req.body.renderNum) {
+      if (!req.query.renderNum) {
         return res.status(400).json({
           message: '한 번에 렌더링 할 게시물 숫자가 전송되지 않았습니다.',
         });
       }
 
-      if (!['latest', 'oldest', 'heart'].includes(req.body.order)) {
+      if (!['latest', 'oldest', 'heart'].includes(req.query.order)) {
         return res
           .status(400)
           .json({ message: '정렬 기준이 올바르지 않습니다.' });
       }
 
       const imageList = await galleryService.getGalleryImages(
-        Number(req.body.pageNum),
-        req.body.order,
-        Number(req.body.renderNum)
+        Number(req.query.pageNum),
+        req.query.order,
+        Number(req.query.renderNum)
       );
 
       return res.status(200).send(imageList);
