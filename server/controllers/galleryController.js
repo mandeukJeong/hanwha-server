@@ -79,4 +79,20 @@ module.exports = {
       return res.status(500).json({ error: e.message });
     }
   },
+
+  increaseHeart: async (req, res) => {
+    try {
+      if (!req.query.id) {
+        return res
+          .status(400)
+          .json({ message: '글 id가 전송되지 않았습니다.' });
+      }
+
+      await galleryService.increaseHeart(req.query.id);
+
+      return res.status(200).send('하트 수 업데이트 성공');
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  },
 };

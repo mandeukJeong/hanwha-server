@@ -10,5 +10,6 @@ router.post(
 );
 router.get('/lists', galleryController.getGalleryImages);
 router.get('/detail', galleryController.getPostDetail);
+router.put('/heart', galleryController.increaseHeart);
 
 module.exports = router;

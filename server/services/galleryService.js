@@ -78,4 +78,24 @@ module.exports = {
       throw e;
     }
   },
+
+  increaseHeart: async (id) => {
+    try {
+      const postContent = await db
+        .collection('gallery')
+        .findOne({ _id: new ObjectId(id) });
+
+      if (!postContent) {
+        const error = new Error('해당 데이터가 존재하지 않습니다.');
+        error.code = 404;
+        throw error;
+      } else {
+        return await db
+          .collection('gallery')
+          .updateOne({ _id: new ObjectId(id) }, { $inc: { heart: 1 } });
+      }
+    } catch (e) {
+      throw e;
+    }
+  },
 };
