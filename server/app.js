@@ -8,6 +8,7 @@ const passportConfig = require('./module/passport');
 
 const userRouter = require('./routes/user');
 const playerRouter = require('./routes/players');
+const chatRouter = require('./routes/chat');
 const galleryRouter = require('./routes/gallery');
 
 const app = express();
@@ -28,6 +29,7 @@ app.use(
   passport.authenticate('jwt', { session: false }),
   playerRouter
 );
+app.use('/chat', passport.authenticate('jwt', { session: false }), chatRouter);
 app.use(
   '/gallery',
   passport.authenticate('jwt', { session: false }),
