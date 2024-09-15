@@ -32,4 +32,12 @@ module.exports = {
       throw e;
     }
   },
+
+  getChatRoomList: async () => {
+    try {
+      return await db.collection('chatroom').find().toArray();
+    } catch (e) {
+      throw e;
+    }
+  },
 };

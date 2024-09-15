@@ -34,4 +34,14 @@ module.exports = {
       return res.status(500).json({ error: e.message });
     }
   },
+
+  getChatRoomList: async (req, res) => {
+    try {
+      const chatList = await chatService.getChatRoomList();
+
+      return res.status(200).send(chatList);
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  },
 };
