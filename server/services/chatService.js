@@ -19,4 +19,17 @@ module.exports = {
       throw e;
     }
   },
+
+  makeChatRoom: async (ourTeam, vsTeam, startDate) => {
+    try {
+      return await db.collection('chatroom').insertOne({
+        ourTeam,
+        vsTeam,
+        startDate,
+        connected: 0,
+      });
+    } catch (e) {
+      throw e;
+    }
+  },
 };
