@@ -36,8 +36,11 @@ module.exports = {
   getChatRoomList: async () => {
     try {
       const chatRooms = await db.collection('chatroom').find().toArray();
+
       const today = new Date();
       today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
 
       const parseDate = (dateStr) => {
         const [datePart, timePart] = dateStr.split(' ');
@@ -50,16 +53,16 @@ module.exports = {
         const dateA = parseDate(a.startDate);
         const dateB = parseDate(b.startDate);
 
-        const diffA = dateA - today;
-        const diffB = dateB - today;
+        const isTodayA = dateA >= today && dateA < tomorrow;
+        const isTodayB = dateB >= today && dateB < tomorrow;
 
-        if (diffA >= 0 && diffB >= 0) {
-          return diffA - diffB;
-        } else if (diffA < 0 && diffB < 0) {
-          return diffB - diffA;
-        } else {
-          return diffA - diffB;
-        }
+        if (isTodayA && !isTodayB) return -1;
+        if (!isTodayA && isTodayB) return 1;
+        if (isTodayA && isTodayB) return dateA - dateB;
+
+        if (dateA >= tomorrow && dateB >= tomorrow) return dateA - dateB;
+
+        return dateB - dateA;
       });
 
       return sortedChatRooms;
