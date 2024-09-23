@@ -16,7 +16,6 @@ module.exports = {
 
   makeChatRoom: async (req, res) => {
     try {
-      console.log(req.body);
       if (!req.body.ourTeam || !req.body.vsTeam || !req.body.startDate) {
         return res
           .status(400)
@@ -56,6 +55,22 @@ module.exports = {
       const chatRoom = await chatService.getOneChatRoom(req.query.id);
 
       return res.status(200).send(chatRoom);
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  },
+
+  increaseMember: async (req, res) => {
+    try {
+      if (!req.body.roomId) {
+        return res
+          .status(400)
+          .json({ message: '채팅방 아이디가 전송되지 않았습니다.' });
+      }
+
+      await chatService.increaseMember(req.body.roomId, req.cookies.user);
+
+      return res.status(200).send('멤버 업데이트 성공');
     } catch (e) {
       return res.status(500).json({ error: e.message });
     }
