@@ -61,8 +61,7 @@ connectDB
   });
 
 io.on('connection', (socket) => {
-  socket.on('ask-join', async (roomId) => {
-    console.log(roomId);
+  socket.on('ask-join', (roomId) => {
     socket.join(roomId);
   });
 
@@ -84,6 +83,10 @@ io.on('connection', (socket) => {
       who: userId,
       nickname,
     });
+  });
+
+  socket.on('leave-room', (roomId) => {
+    socket.leave(roomId);
   });
 });
 
