@@ -67,10 +67,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('message-send', async (data) => {
-    const userId = cookieParser.JSONCookies(
-      cookie.parse(socket.request.headers.cookie)
-    ).user;
-    const nickname = cookie.parse(socket.request.headers.cookie).nickname;
+    const cookies = socket.request.headers.cookie;
+    const userId = cookieParser.JSONCookies(cookie.parse(cookies)).user;
+    const nickname = cookie.parse(cookies).nickname;
 
     await db.collection('chatMessage').insertOne({
       parentRoom: new ObjectId(data.room),
@@ -81,8 +80,8 @@ io.on('connection', (socket) => {
     });
 
     io.to(data.room).emit('message-broadcast', {
-      message: data.message,
-      userId,
+      content: data.message,
+      who: userId,
       nickname,
     });
   });

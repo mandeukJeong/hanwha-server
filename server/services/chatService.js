@@ -130,6 +130,7 @@ module.exports = {
       const chatMessage = await db
         .collection('chatMessage')
         .find({ parentRoom: new ObjectId(roomId) })
+        .sort({ date: 1 })
         .toArray();
 
       if (!chatMessage) {
