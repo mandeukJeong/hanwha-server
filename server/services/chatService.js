@@ -124,4 +124,23 @@ module.exports = {
       throw e;
     }
   },
+
+  getChatMessage: async (roomId) => {
+    try {
+      const chatMessage = await db
+        .collection('chatMessage')
+        .find({ parentRoom: new ObjectId(roomId) })
+        .toArray();
+
+      if (!chatMessage) {
+        const error = new Error('해당 메세지 내역이 존재하지 않습니다.');
+        error.code = 404;
+        throw error;
+      }
+
+      return chatMessage;
+    } catch (e) {
+      throw e;
+    }
+  },
 };

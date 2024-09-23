@@ -91,4 +91,20 @@ module.exports = {
       return res.status(500).json({ error: e.message });
     }
   },
+
+  getChatMessage: async (req, res) => {
+    try {
+      if (!req.query.id) {
+        return res
+          .status(400)
+          .json({ message: '채팅방 아이디가 전송되지 않았습니다.' });
+      }
+
+      const chatMessage = await chatService.getChatMessage(req.query.id);
+
+      return res.status(200).send(chatMessage);
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  },
 };
