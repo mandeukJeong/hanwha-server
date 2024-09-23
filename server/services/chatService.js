@@ -26,7 +26,7 @@ module.exports = {
         ourTeam,
         vsTeam,
         startDate,
-        connected: 0,
+        member: [],
       });
     } catch (e) {
       throw e;
