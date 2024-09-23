@@ -44,4 +44,20 @@ module.exports = {
       return res.status(500).json({ error: e.message });
     }
   },
+
+  getOneChatRoom: async (req, res) => {
+    try {
+      if (!req.query.id) {
+        return res
+          .status(400)
+          .json({ message: '채팅방 아이디가 전송되지 않았습니다.' });
+      }
+
+      const chatRoom = await chatService.getOneChatRoom(req.query.id);
+
+      return res.status(200).send(chatRoom);
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  },
 };

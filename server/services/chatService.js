@@ -70,4 +70,12 @@ module.exports = {
       throw e;
     }
   },
+
+  getOneChatRoom: async (id) => {
+    try {
+      return await db.collection('chatroom').findOne({ _id: new ObjectId(id) });
+    } catch (e) {
+      throw e;
+    }
+  },
 };
