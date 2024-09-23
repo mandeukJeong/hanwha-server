@@ -101,4 +101,27 @@ module.exports = {
       throw e;
     }
   },
+
+  removeMember: async (roomId, userId) => {
+    try {
+      const isChatRoom = await db
+        .collection('chatroom')
+        .findOne({ _id: new ObjectId(roomId) });
+
+      if (!isChatRoom) {
+        const error = new Error('채팅방이 존재하지 않습니다.');
+        error.code = 404;
+        throw error;
+      }
+
+      return await db
+        .collection('chatroom')
+        .updateOne(
+          { _id: new ObjectId(roomId) },
+          { $pull: { member: userId } }
+        );
+    } catch (e) {
+      throw e;
+    }
+  },
 };

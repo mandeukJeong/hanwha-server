@@ -8,5 +8,6 @@ router.post('/new', chatController.makeChatRoom);
 router.get('/list', chatController.getChatRoomList);
 router.get('/room', chatController.getOneChatRoom);
 router.put('/member', chatController.increaseMember);
+router.put('/remove', chatController.removeMember);
 
 module.exports = router;
