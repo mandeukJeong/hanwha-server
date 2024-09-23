@@ -62,13 +62,13 @@ module.exports = {
 
   increaseMember: async (req, res) => {
     try {
-      if (!req.body.roomId) {
+      if (!req.query.id) {
         return res
           .status(400)
           .json({ message: '채팅방 아이디가 전송되지 않았습니다.' });
       }
 
-      await chatService.increaseMember(req.body.roomId, req.cookies.user);
+      await chatService.increaseMember(req.query.id, req.cookies.user);
 
       return res.status(200).send('멤버 업데이트 성공');
     } catch (e) {
@@ -78,13 +78,13 @@ module.exports = {
 
   removeMember: async (req, res) => {
     try {
-      if (!req.body.roomId) {
+      if (!req.query.id) {
         return res
           .status(400)
           .json({ message: '채팅방 아이디가 전송되지 않았습니다.' });
       }
 
-      await chatService.removeMember(req.body.roomId, req.cookies.user);
+      await chatService.removeMember(req.query.id, req.cookies.user);
 
       return res.status(200).send('멤버 pop 성공');
     } catch (e) {
