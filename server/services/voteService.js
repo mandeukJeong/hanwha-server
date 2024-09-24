@@ -41,4 +41,47 @@ module.exports = {
       throw e;
     }
   },
+
+  updateVoteList: async (voteDone) => {
+    try {
+      for (let i = 0; i < voteDone.length; i++) {
+        const voteItem = await db
+          .collection('vote')
+          .findOne({ _id: new ObjectId(voteDone[i]._id) });
+        const matchedPlayer = voteItem.voted.find(
+          (player) => player.pCd === voteDone[i].pCd
+        );
+
+        if (matchedPlayer) {
+          await db
+            .collection('vote')
+            .updateOne(
+              {
+                _id: new ObjectId(voteDone[i]._id),
+                'voted.pCd': voteDone[i].pCd,
+              },
+              { $inc: { 'voted.$.count': 1 } }
+            );
+        } else {
+          await db
+            .collection('vote')
+            .updateOne(
+              { _id: new ObjectId(voteDone[i]._id) },
+              {
+                $push: {
+                  voted: {
+                    pCd: voteDone[i].pCd,
+                    pNm: voteDone[i].pNm,
+                    img: voteDone[i].img,
+                    count: 1,
+                  },
+                },
+              }
+            );
+        }
+      }
+    } catch (e) {
+      throw e;
+    }
+  },
 };
