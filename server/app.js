@@ -11,6 +11,7 @@ const { ObjectId } = require('mongodb');
 
 const userRouter = require('./routes/user');
 const playerRouter = require('./routes/players');
+const voteRouter = require('./routes/vote');
 const chatRouter = require('./routes/chat');
 const galleryRouter = require('./routes/gallery');
 
@@ -43,6 +44,7 @@ app.use(
   passport.authenticate('jwt', { session: false }),
   playerRouter
 );
+app.use('/vote', passport.authenticate('jwt', { session: false }), voteRouter);
 app.use('/chat', passport.authenticate('jwt', { session: false }), chatRouter);
 app.use(
   '/gallery',
