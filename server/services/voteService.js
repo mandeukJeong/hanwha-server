@@ -84,4 +84,18 @@ module.exports = {
       throw e;
     }
   },
+
+  isUserVoted: async (userId) => {
+    const isVoted = await db
+      .collection('user')
+      .findOne({ _id: new ObjectId(userId) });
+
+    if (!isVoted) {
+      const error = new Error('존재하지 않는 계정입니다.');
+      error.code = 404;
+      throw error;
+    } else {
+      return isVoted.voted;
+    }
+  },
 };

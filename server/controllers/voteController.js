@@ -21,4 +21,13 @@ module.exports = {
       return res.status(500).json({ error: e.message });
     }
   },
+
+  isUserVoted: async (req, res) => {
+    try {
+      const isVoted = await voteService.isUserVoted(req.cookies.user);
+      return res.status(200).send(isVoted);
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  },
 };
