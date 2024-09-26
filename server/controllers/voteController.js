@@ -30,4 +30,13 @@ module.exports = {
       return res.status(500).json({ error: e.message });
     }
   },
+
+  getVoteRank: async (req, res) => {
+    try {
+      const rankList = await voteService.getVoteRank();
+      return res.status(200).send(rankList);
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  },
 };

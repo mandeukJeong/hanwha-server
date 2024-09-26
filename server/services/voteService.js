@@ -98,4 +98,25 @@ module.exports = {
       return isVoted.voted;
     }
   },
+
+  getVoteRank: async () => {
+    const voteList = await db.collection('vote').find().toArray();
+    const rankList = [];
+
+    for (let i = 0; i < voteList.length; i++) {
+      const topVoted = voteList[i].voted.reduce((prev, current) => {
+        return prev.count > current.count ? prev : current;
+      });
+
+      const rankItem = {
+        _id: voteList[i]._id,
+        title: voteList[i].title,
+        img: topVoted.img,
+      };
+
+      rankList.push(rankItem);
+    }
+
+    return rankList;
+  },
 };
