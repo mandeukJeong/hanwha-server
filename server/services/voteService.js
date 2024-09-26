@@ -86,37 +86,59 @@ module.exports = {
   },
 
   isUserVoted: async (userId) => {
-    const isVoted = await db
-      .collection('user')
-      .findOne({ _id: new ObjectId(userId) });
+    try {
+      const isVoted = await db
+        .collection('user')
+        .findOne({ _id: new ObjectId(userId) });
 
-    if (!isVoted) {
-      const error = new Error('존재하지 않는 계정입니다.');
-      error.code = 404;
-      throw error;
-    } else {
-      return isVoted.voted;
+      if (!isVoted) {
+        const error = new Error('존재하지 않는 계정입니다.');
+        error.code = 404;
+        throw error;
+      } else {
+        return isVoted.voted;
+      }
+    } catch (e) {
+      throw e;
     }
   },
 
   getVoteRank: async () => {
-    const voteList = await db.collection('vote').find().toArray();
-    const rankList = [];
+    try {
+      const voteList = await db.collection('vote').find().toArray();
+      const rankList = [];
 
-    for (let i = 0; i < voteList.length; i++) {
-      const topVoted = voteList[i].voted.reduce((prev, current) => {
-        return prev.count > current.count ? prev : current;
-      });
+      for (let i = 0; i < voteList.length; i++) {
+        const topVoted = voteList[i].voted.reduce((prev, current) => {
+          return prev.count > current.count ? prev : current;
+        });
 
-      const rankItem = {
-        _id: voteList[i]._id,
-        title: voteList[i].title,
-        img: topVoted.img,
-      };
+        const rankItem = {
+          _id: voteList[i]._id,
+          title: voteList[i].title,
+          img: topVoted.img,
+        };
 
-      rankList.push(rankItem);
+        rankList.push(rankItem);
+      }
+
+      return rankList;
+    } catch (e) {
+      throw e;
     }
+  },
 
-    return rankList;
+  getVoteResult: async (id) => {
+    try {
+      const resultList = await db
+        .collection('vote')
+        .findOne({ _id: new ObjectId(id) });
+
+      resultList.voted.sort((a, b) => b.count - a.count);
+
+      return resultList;
+    } catch (e) {
+      throw e;
+    }
   },
 };
