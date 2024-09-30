@@ -40,15 +40,14 @@ module.exports = {
 
   getPlayerScore: async (req, res) => {
     try {
-      if (!req.query.pCd && !req.query.posCd) {
+      if (!req.query.pCd) {
         return res.status(400).json({
-          message: '선수 코드 또는 포지션 코드가 전송되지 않았습니다.',
+          message: '선수 코드가 전송되지 않았습니다.',
         });
       }
 
       const playerScore = await playerService.getPlayerScore(
-        Number(req.query.pCd),
-        Number(req.query.posCd)
+        Number(req.query.pCd)
       );
 
       return res.status(200).send(playerScore);
