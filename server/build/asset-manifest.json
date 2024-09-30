@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b5b8381d.css",
+    "main.js": "/static/js/main.d14d1211.js",
+    "static/media/catcher.png": "/static/media/catcher.5fb77ef7dcf084038312.png",
+    "static/media/main_bg4.jpeg": "/static/media/main_bg4.0e4a49695b82e5d83039.jpeg",
+    "static/media/outfielder.png": "/static/media/outfielder.de3ed04c59d1adb5a538.png",
+    "static/media/pitcher.png": "/static/media/pitcher.b88d5aca95f7ee50d8e3.png",
+    "static/media/infielder.png": "/static/media/infielder.668b2b95bedc866c4b26.png",
+    "static/media/chat.png": "/static/media/chat.359c2ac5641c52b900a9.png",
+    "static/media/vote_player.png": "/static/media/vote_player.6e9d3680d615ec37e008.png",
+    "static/media/main_bg2.JPG": "/static/media/main_bg2.2ba5583c5b260f770973.JPG",
+    "static/media/main_bg3.JPG": "/static/media/main_bg3.b7d46db6e37ff938a38e.JPG",
+    "static/media/player_bg.JPG": "/static/media/player_bg.1039a0f08faad413ed4a.JPG",
+    "static/media/players_header.jpg": "/static/media/players_header.828f72216b549945576d.jpg",
+    "static/media/main_bg1.jpeg": "/static/media/main_bg1.5386ff6bbee95bc03820.jpeg",
+    "static/media/soori.png": "/static/media/soori.24e310ee77c9789d2618.png",
+    "static/media/produce_101.png": "/static/media/produce_101.e84339bbb9576d7db52d.png",
+    "static/media/vote_end.png": "/static/media/vote_end.c2674d6bccd16e35118a.png",
+    "static/media/chevron.png": "/static/media/chevron.c882a1d3bcc1fb049d8b.png",
+    "static/media/hanwha_symbol.png": "/static/media/hanwha_symbol.57de2226be81a5c45d7a.png",
+    "index.html": "/index.html",
+    "main.b5b8381d.css.map": "/static/css/main.b5b8381d.css.map",
+    "main.d14d1211.js.map": "/static/js/main.d14d1211.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b5b8381d.css",
+    "static/js/main.d14d1211.js"
+  ]
+}
