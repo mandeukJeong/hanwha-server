@@ -10,6 +10,7 @@ const connectDB = require('./database/database');
 const cookie = require('cookie');
 const { ObjectId } = require('mongodb');
 
+const apiRouter = express.Router();
 const userRouter = require('./routes/user');
 const playerRouter = require('./routes/players');
 const voteRouter = require('./routes/vote');
@@ -22,7 +23,7 @@ const { Server } = require('socket.io');
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000/',
+    origin: 'http://hanwha-fan.ap-northeast-2.elasticbeanstalk.com/',
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -39,15 +40,23 @@ app.use(cors());
 app.use(passport.initialize());
 passportConfig();
 
-app.use('/user', userRouter);
-app.use(
+apiRouter.use('/user', userRouter);
+apiRouter.use(
   '/players',
   passport.authenticate('jwt', { session: false }),
   playerRouter
 );
-app.use('/vote', passport.authenticate('jwt', { session: false }), voteRouter);
-app.use('/chat', passport.authenticate('jwt', { session: false }), chatRouter);
-app.use(
+apiRouter.use(
+  '/vote',
+  passport.authenticate('jwt', { session: false }),
+  voteRouter
+);
+apiRouter.use(
+  '/chat',
+  passport.authenticate('jwt', { session: false }),
+  chatRouter
+);
+apiRouter.use(
   '/gallery',
   passport.authenticate('jwt', { session: false }),
   galleryRouter
@@ -103,6 +112,7 @@ server.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기 중');
 });
 
+app.use('/api', apiRouter);
 app.use(express.static(path.join(__dirname, './build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './build/index.html'));
