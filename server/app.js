@@ -56,11 +56,7 @@ apiRouter.use(
   passport.authenticate('jwt', { session: false }),
   chatRouter
 );
-apiRouter.use(
-  '/gallery',
-  passport.authenticate('jwt', { session: false }),
-  galleryRouter
-);
+apiRouter.use('/gallery', galleryRouter);
 
 let db;
 connectDB
